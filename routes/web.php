@@ -43,13 +43,13 @@ use Spatie\Permission\Models\Role;
 // });
 
 
-Route::middleware(['guest:user'])->group(function () {
+// Route::middleware(['guest:user'])->group(function () {
     Route::get('/', function () {
         return view('auth.loginadmin');
     })->name('loginadmin');
 
     Route::post('/prosesloginadmin', [AuthController::class, 'prosesloginadmin']);
-});
+// });
 // Route untuk karyawan
 // Route::middleware(['auth:karyawan'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);

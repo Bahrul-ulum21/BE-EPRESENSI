@@ -41,15 +41,15 @@ return [
             'provider' => 'users',
         ],
 
-        'karyawan' => [
-            'driver' => 'session',
-            'provider' => 'karyawans',
-        ],
+        // 'karyawan' => [
+        //     'driver' => 'session',
+        //     'provider' => 'karyawans',
+        // ],
 
-        'user' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+        // 'user' => [
+        //     'driver' => 'session',
+        //     'provider' => 'users',
+        // ],
 
         'api' => [
             'driver' => 'jwt',

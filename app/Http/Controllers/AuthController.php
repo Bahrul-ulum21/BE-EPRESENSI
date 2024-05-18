@@ -39,30 +39,17 @@ class AuthController extends Controller
     public function prosesloginadmin(Request $request)
     {
         $credentials = $request->only('username', 'password');
+        $user = Auth::getProvider()->retrieveByCredentials($credentials);
 
         // Attempt to authenticate using the 'user' guard
-        if (Auth::guard('user')->attempt($credentials)) {
-            $user = Auth::guard('user')->user();
-
             // Check if the authenticated user has the admin role
             if ($user->hasRole('admin')) {
                 return redirect('/panel/dashboardadmin');
             } elseif ($user->hasRole('employee')) {
                 return redirect('/dashboard');
             }
-        }
 
-        // Attempt to authenticate using the 'karyawan' guard
-        if (Auth::guard('karyawan')->attempt($credentials)) {
-            $user = Auth::guard('karyawan')->user();
 
-            // Check if the authenticated user has the admin role
-            if ($user->hasRole('admin')) {
-                return redirect('/panel/dashboardadmin');
-            } elseif ($user->hasRole('employee')) {
-                return redirect('/dashboard');
-            }
-        }
 
         // Authentication failed
         return redirect('/')->with(['warning' => 'Nik (Username) / Password Salah']);

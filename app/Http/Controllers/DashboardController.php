@@ -10,20 +10,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        dd(Auth::user());
         $hariini = date("Y-m-d");
         $bulanini = date("m") * 1; //1 atau Januari
         $tahunini = date("Y"); // 2023
-        $nik = Auth::user()->username;
-        $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
+        // $nik = Auth::user()->username;
+        // $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
 
-        $kode_dept = Auth::guard('karyawan')->user()->kode_dept;
-        $presensihariini = DB::table('presensi')->where('nik', $nik)->where('tgl_presensi', $hariini)->first();
+        // $kode_dept = Auth::guard('karyawan')->user()->kode_dept;
+        $presensihariini = DB::table('presensi')
+            // ->where('nik', $nik)
+            ->where('tgl_presensi', $hariini)->first();
         $historibulanini = DB::table('presensi')
             ->select('presensi.*', 'keterangan', 'jam_kerja.*', 'doc_sid', 'nama_cuti')
             ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
             ->leftJoin('pengajuan_izin', 'presensi.kode_izin', '=', 'pengajuan_izin.kode_izin')
             ->leftJoin('master_cuti', 'pengajuan_izin.kode_cuti', '=', 'master_cuti.kode_cuti')
-            ->where('presensi.nik', $nik)
+            // ->where('presensi.nik', $nik)
             ->whereRaw('MONTH(tgl_presensi)="' . $bulanini . '"')
             ->whereRaw('YEAR(tgl_presensi)="' . $tahunini . '"')
             ->orderBy('tgl_presensi', 'desc')
@@ -39,21 +42,22 @@ class DashboardController extends Controller
 
             ')
             ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
-            ->where('nik', $nik)
+            // ->where('nik', $nik)
             ->whereRaw('MONTH(tgl_presensi)="' . $bulanini . '"')
             ->whereRaw('YEAR(tgl_presensi)="' . $tahunini . '"')
             ->first();
 
 
         $leaderboard = DB::table('presensi')
-            ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
+            ->join('users', 'presensi.nik', '=', 'users.username')
             ->where('tgl_presensi', $hariini)
             ->orderBy('jam_in')
             ->get();
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
-        $cabang = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
-        $departemen = DB::table('departemen')->where('kode_dept', $kode_dept)->first();
+        $cabang = DB::table('cabang')
+            ->where('kode_cabang', 1)->first();
+        $departemen = DB::table('departemen')->where('kode_dept', 1)->first();
 
         return view('dashboard.dashboard', compact('presensihariini', 'historibulanini', 'namabulan', 'bulanini', 'tahunini', 'rekappresensi', 'leaderboard', 'cabang', 'departemen'));
     }
