@@ -34,24 +34,24 @@ use Spatie\Permission\Models\Role;
 
 
 
-Route::middleware(['guest:karyawan'])->group(function () {
-    Route::get('/', function () {
-        return view('auth.login');
-    })->name('login');
+// Route::middleware(['guest:karyawan'])->group(function () {
+//     Route::get('/', function () {
+//         return view('auth.loginadmin');
+//     })->name('login');
 
-    Route::post('/proseslogin', [AuthController::class, 'proseslogin']);
-});
+//     Route::post('/proseslogin', [AuthController::class, 'proseslogin']);
+// });
 
 
 Route::middleware(['guest:user'])->group(function () {
-    Route::get('/panel', function () {
+    Route::get('/', function () {
         return view('auth.loginadmin');
     })->name('loginadmin');
 
     Route::post('/prosesloginadmin', [AuthController::class, 'prosesloginadmin']);
 });
 // Route untuk karyawan
-Route::middleware(['auth:karyawan'])->group(function () {
+// Route::middleware(['auth:karyawan'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/proseslogout', [AuthController::class, 'proseslogout']);
     //Presensi
@@ -89,11 +89,11 @@ Route::middleware(['auth:karyawan'])->group(function () {
 
     Route::get('/izin/{kode_izin}/showact', [PresensiController::class, 'showact']);
     Route::get('/izin/{kode_izin}/delete', [PresensiController::class, 'deleteizin']);
-});
+// });
 
 
 //Route Yang Bisa di AKses Oleh Administrator dan Admin Departemen
-Route::group(['middleware' => ['role:administrator|admin departemen,user']], function () {
+// Route::group(['middleware' => ['role:administrator|admin departemen,user']], function () {
     Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin']);
     Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
 
@@ -121,11 +121,11 @@ Route::group(['middleware' => ['role:administrator|admin departemen,user']], fun
 
     Route::post('/koreksipresensi', [PresensiController::class, 'koreksipresensi']);
     Route::post('/storekoreksipresensi', [PresensiController::class, 'storekoreksipresensi']);
-});
+// });
 
 
 //ROute yang Hanya bisa di akses oleh Administrator
-Route::group(['middleware' => ['role:administrator,user']], function () {
+// Route::group(['middleware' => ['role:administrator,user']], function () {
 
 
 
@@ -192,7 +192,7 @@ Route::group(['middleware' => ['role:administrator,user']], function () {
     Route::post('/cuti/edit', [CutiController::class, 'edit']);
     Route::post('/cuti/{kode_cuti}/update', [CutiController::class, 'update']);
     Route::post('/cuti/{kode_cuti}/delete', [CutiController::class, 'delete']);
-});
+// });
 
 
 Route::get('/createrolepermission', function () {

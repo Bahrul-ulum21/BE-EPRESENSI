@@ -16,6 +16,8 @@ class AuthController extends Controller
         } else {
             return redirect('/')->with(['warning' => 'Nik / Password Salah']);
         }
+
+
     }
 
     public function proseslogout()
@@ -30,16 +32,39 @@ class AuthController extends Controller
     {
         if (Auth::guard('user')->check()) {
             Auth::guard('user')->logout();
-            return redirect('/panel');
+            return redirect('/');
         }
     }
 
     public function prosesloginadmin(Request $request)
     {
-        if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect('/panel/dashboardadmin');
-        } else {
-            return redirect('/panel')->with(['warning' => 'Username atau Password Salah']);
+        $credentials = $request->only('username', 'password');
+
+        // Attempt to authenticate using the 'user' guard
+        if (Auth::guard('user')->attempt($credentials)) {
+            $user = Auth::guard('user')->user();
+
+            // Check if the authenticated user has the admin role
+            if ($user->hasRole('admin')) {
+                return redirect('/panel/dashboardadmin');
+            } elseif ($user->hasRole('employee')) {
+                return redirect('/dashboard');
+            }
         }
+
+        // Attempt to authenticate using the 'karyawan' guard
+        if (Auth::guard('karyawan')->attempt($credentials)) {
+            $user = Auth::guard('karyawan')->user();
+
+            // Check if the authenticated user has the admin role
+            if ($user->hasRole('admin')) {
+                return redirect('/panel/dashboardadmin');
+            } elseif ($user->hasRole('employee')) {
+                return redirect('/dashboard');
+            }
+        }
+
+        // Authentication failed
+        return redirect('/')->with(['warning' => 'Nik (Username) / Password Salah']);
     }
 }

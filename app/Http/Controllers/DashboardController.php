@@ -13,7 +13,7 @@ class DashboardController extends Controller
         $hariini = date("Y-m-d");
         $bulanini = date("m") * 1; //1 atau Januari
         $tahunini = date("Y"); // 2023
-        $nik = Auth::guard('karyawan')->user()->nik;
+        $nik = Auth::user()->username;
         $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
 
         $kode_dept = Auth::guard('karyawan')->user()->kode_dept;
