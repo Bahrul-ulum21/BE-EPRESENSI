@@ -246,13 +246,13 @@
                         class="dropdown-menu {{ request()->is(['karyawan', 'departemen', 'cabang', 'cuti']) ? 'show' : '' }}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                @role('administrator|admin departemen', 'user')
+                                {{-- @role('administrator|admin departemen', 'user') --}}
                                     <a class="dropdown-item {{ request()->is(['karyawan']) ? 'active' : '' }}"
                                         href="/karyawan">
                                         Karyawan
                                     </a>
-                                @endrole
-                                @role('administrator', 'user')
+                                {{-- @endrole --}}
+                                {{-- @role('administrator', 'user') --}}
                                     <a class="dropdown-item {{ request()->is(['departemen']) ? 'active' : '' }}"
                                         href="/departemen">
                                         Departemen
@@ -265,7 +265,7 @@
                                     <a class="dropdown-item {{ request()->is(['cuti']) ? 'active' : '' }}" href="/cuti">
                                         Cuti
                                     </a>
-                                @endrole
+                                {{-- @endrole --}}
                             </div>
                         </div>
                     </div>
@@ -355,7 +355,6 @@
                         </div>
                     </div>
                 </li>
-                @role('administrator', 'user')
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ request()->is(['konfigurasi', 'konfigurasi/*']) ? 'show' : '' }}"
                             href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button"
@@ -396,7 +395,6 @@
                             </div>
                         </div>
                     </li>
-                @endrole
             </ul>
         </div>
     </div>

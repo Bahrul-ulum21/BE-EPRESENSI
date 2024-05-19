@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             @else
-                            <input type="hidden" name="kode_dept" value="{{ Auth::guard('user')->user()->kode_dept }}">
+                            <input type="hidden" name="kode_dept" value="{{ Auth::user()->kode_dept }}">
                             @endrole
                             <div class="row mt-2">
                                 <div class="col-6">

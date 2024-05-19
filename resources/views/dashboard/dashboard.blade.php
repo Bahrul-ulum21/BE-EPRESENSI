@@ -21,9 +21,9 @@
     </a>
     <div id="user-detail">
         <div class="avatar">
-            @if (!empty(Auth::guard('karyawan')->user()->foto))
+            @if (Auth::user()->hasRole('employee'))
             @php
-            $path = Storage::url('uploads/karyawan/' . Auth::guard('karyawan')->user()->foto);
+            $path = Storage::url('uploads/karyawan/' . Auth::user()->foto);
             @endphp
             <img src="{{ url($path) }}" alt="avatar" class="imaged w64" style="height:60px">
             @else
@@ -31,9 +31,8 @@
             @endif
         </div>
         <div id="user-info">
-            {{ dd(Auth::user()) }}
-            <h3 id="user-name">{{ Auth::guard('karyawan')->user()->nama_lengkap }}</h3>
-            <span id="user-role">{{ Auth::guard('karyawan')->user()->jabatan }}</span>
+            <h3 id="user-name">{{ Auth::user()->name }}</h3>
+            <span id="user-role">{{ Auth::user()->jabatan }}</span>
             <span id="user-role">({{ $cabang->nama_cabang }})</span>
             <p style="margin-top: 15px">
                 <span id="user-role">({{ $departemen->nama_dept }})</span>

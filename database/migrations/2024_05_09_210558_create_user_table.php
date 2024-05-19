@@ -24,7 +24,8 @@ return new class extends Migration
             $table->char('kode_cabang',3)->nullable();
             $table->string('no_tlpn',13)->nullable();
             $table->text('alamat')->nullable();
-            $table->integer('kode_jabatan');
+            $table->char('kode_jabatan')->nullable();
+            $table->string('foto')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

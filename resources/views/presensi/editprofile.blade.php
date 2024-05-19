@@ -15,7 +15,7 @@
 
 @section('content')
 
-<form action="/presensi/{{ $karyawan->nik }}/updateprofile" method="POST" enctype="multipart/form-data" style="margin-top:70px">
+<form action="/presensi/{{ $karyawan->username }}/updateprofile" method="POST" enctype="multipart/form-data" style="margin-top:70px">
     @csrf
     <div class="col">
         @php
@@ -39,18 +39,33 @@
         </div>
         @enderror
         <div class="form-group boxed">
+            <label for="username">NIK</label>
             <div class="input-wrapper">
-                <input type="text" class="form-control" value="{{ $karyawan->nama_lengkap }}" name="nama_lengkap" placeholder="Nama Lengkap" autocomplete="off">
+                <input type="text" class="form-control" value="{{ $karyawan->username }}" name="username" id="username" placeholder="NIK" autocomplete="off">
             </div>
         </div>
         <div class="form-group boxed">
+            <label for="email">Email</label>
             <div class="input-wrapper">
-                <input type="text" class="form-control" value="{{ $karyawan->no_hp }}" name="no_hp" placeholder="No. HP" autocomplete="off">
+                <input type="text" class="form-control" value="{{ $karyawan->email }}" name="email" id="email" placeholder="Email" autocomplete="off">
             </div>
         </div>
         <div class="form-group boxed">
+            <label for="name">Nama Lengkap</label>
             <div class="input-wrapper">
-                <input type="password" class="form-control" name="password" placeholder="Password" autocomplete="off">
+                <input type="text" class="form-control" value="{{ $karyawan->name }}" name="name" id="name" placeholder="Nama Lengkap" autocomplete="off">
+            </div>
+        </div>
+        <div class="form-group boxed">
+            <label for="no_hp">No. HP</label>
+            <div class="input-wrapper">
+                <input type="text" class="form-control" value="{{ $karyawan->no_tlpn }}" name="no_hp" id="no_hp" placeholder="No. HP" autocomplete="off">
+            </div>
+        </div>
+        <div class="form-group boxed">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password" autocomplete="off">
             </div>
         </div>
 

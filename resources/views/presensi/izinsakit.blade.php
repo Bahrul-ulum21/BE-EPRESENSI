@@ -24,7 +24,7 @@
                                     {{ Session::get('success') }}
                                 </div>
                             @endif
-        
+
                             @if (Session::get('warning'))
                                 <div class="alert alert-warning">
                                     {{ Session::get('warning') }}
@@ -70,7 +70,7 @@
                                                 class="form-control" placeholder="Nama Karyawan" name="nama_lengkap">
                                         </div>
                                     </div>
-                                    @role('administrator', 'user')
+                                    {{-- @role('administrator', 'user') --}}
                                         <div class="col-2">
                                             <div class="form-group">
                                                 <select name="kode_cabang" id="kode_cabang" class="form-select">
@@ -109,7 +109,7 @@
                                             </select>
                                         </div>
                                     </div>
-        
+
                                     <div class="col-1">
                                         <div class="form-group">
                                             <button class="btn btn-primary" type="submit">
@@ -154,9 +154,9 @@
                                         </th>
                                         <th>Keterangan</th>
                                         <th>Status Approve</th>
-                                        @role('administrator', 'user')
+                                        {{-- @role('administrator', 'user') --}}
                                             <th>Aksi</th>
-                                        @endrole
+                                        {{-- @endrole --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -210,7 +210,7 @@
                                                     <span class="badge bg-warning">Pending</span>
                                                 @endif
                                             </td>
-                                            @role('administrator', 'user')
+                                            {{-- @role('administrator', 'user') --}}
                                                 <td>
                                                     @if ($d->status_approved == 0)
                                                         <a href="#" class="btn btn-sm btn-primary approve"
@@ -243,7 +243,7 @@
                                                             Batalkan
                                                         </a>
                                                     @endif
-        
+
                                                 </td>
                                             @endrole
                                         </tr>

@@ -308,50 +308,36 @@ class PresensiController extends Controller
 
     public function editprofile()
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
+        $karyawan = Auth::user();
         return view('presensi.editprofile', compact('karyawan'));
     }
 
-    public function updateprofile(Request $request)
+    public function updateProfile(Request $request)
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $nama_lengkap = $request->nama_lengkap;
-        $no_hp = $request->no_hp;
-        $password = Hash::make($request->password);
-        $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
-        $request->validate([
-            'foto' => 'image|mimes:png,jpg|max:500'
-        ]);
-        if ($request->hasFile('foto')) {
-            $foto = $nik . "." . $request->file('foto')->getClientOriginalExtension();
-        } else {
-            $foto = $karyawan->foto;
-        }
-        if (empty($request->password)) {
-            $data = [
-                'nama_lengkap' => $nama_lengkap,
-                'no_hp' => $no_hp,
-                'foto' => $foto
-            ];
-        } else {
-            $data = [
-                'nama_lengkap' => $nama_lengkap,
-                'no_hp' => $no_hp,
-                'password' => $password,
-                'foto' => $foto
-            ];
-        }
+        try {
+            $user = Auth::user();
+            $user->username = $request->username;
+            $user->name = $request->name;
+            $user->no_tlpn = $request->no_hp;
 
-        $update = DB::table('karyawan')->where('nik', $nik)->update($data);
-        if ($update) {
             if ($request->hasFile('foto')) {
-                $folderPath = "public/uploads/karyawan/";
-                $request->file('foto')->storeAs($folderPath, $foto);
+                $foto = $user->username. '.'. $request->file('foto')->getClientOriginalExtension();
+                $user->foto = $foto;
+                $request->file('foto')->storeAs('public/uploads/karyawan/', $foto);
             }
-            return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
-        } else {
-            return Redirect::back()->with(['error' => 'Data gagal Di Update']);
+
+            if (!empty($request->password)) {
+                $user->password = Hash::make($request->password);
+            }
+
+            if ($user->save()) {
+                return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
+            } else {
+                return Redirect::back()->with(['error' => 'Data gagal Di Update']);
+            }
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return Redirect::back()->with(['error' => 'Terjadi Kesalahan Sistem']);
         }
     }
 
@@ -501,9 +487,9 @@ class PresensiController extends Controller
 
     public function laporan()
     {
-        $kode_dept = Auth::guard('user')->user()->kode_dept;
-        $kode_cabang = Auth::guard('user')->user()->kode_cabang;
-        $user = User::find(Auth::guard('user')->user()->id);
+        $kode_dept = Auth::user()->kode_dept;
+        $kode_cabang = Auth::user()->kode_cabang;
+        $user = User::find(Auth::user()->id);
 
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         if ($user->hasRole('admin departemen')) {
@@ -516,7 +502,7 @@ class PresensiController extends Controller
                 ->orderBy('nama_lengkap')->get();
         }
 
-        return view('presensi.laporan', compact('namabulan', 'karyawan'));
+        return view('presensi.laporan', compact('namabulan', 'user'));
     }
 
     public function cetaklaporan(Request $request)

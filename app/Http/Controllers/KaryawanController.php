@@ -17,35 +17,41 @@ class KaryawanController extends Controller
 {
     public function index(Request $request)
     {
-        $kode_dept = Auth::guard('user')->user()->kode_dept;
-        $kode_cabang = Auth::guard('user')->user()->kode_cabang;
-        $user = User::find(Auth::guard('user')->user()->id);
+        try {
+            $kode_dept = Auth::user()->kode_dept;
+            $kode_cabang = Auth::user()->kode_cabang;
+            $user = User::find(Auth::user()->id);
 
-        $query = Karyawan::query();
-        $query->select('karyawan.*', 'nama_dept');
-        $query->join('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept');
-        $query->orderBy('nama_lengkap');
-        if (!empty($request->nama_karyawan)) {
-            $query->where('nama_lengkap', 'like', '%' . $request->nama_karyawan . '%');
+            $query = User::query();
+            $query->select('users.*', 'nama_dept');
+            $query->join('departemen', 'users.kode_dept', '=', 'departemen.kode_dept');
+            $query->orderBy('name');
+            if (!empty($request->nama_karyawan)) {
+                $query->where('name', 'like', '%' . $request->nama_karyawan . '%');
+            }
+
+            if (!empty($request->kode_dept)) {
+                $query->where('users.kode_dept', $request->kode_dept);
+            }
+
+            if (!empty($request->kode_cabang)) {
+                $query->where('users.kode_cabang', $request->kode_cabang);
+            }
+
+            if ($user->hasRole('admin departemen')) {
+                $query->where('users.kode_dept', $kode_dept);
+                $query->where('users.kode_cabang', $kode_cabang);
+            }
+            $karyawan = $query->paginate(10);
+
+            $departemen = DB::table('departemen')->get();
+            $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
+            return view('karyawan.index', compact('karyawan', 'departemen', 'cabang'));
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            // Optionally, you can return a user-friendly error message
+            return back()->with('error', 'An error occurred while fetching data. Please try again later.');
         }
-
-        if (!empty($request->kode_dept)) {
-            $query->where('karyawan.kode_dept', $request->kode_dept);
-        }
-
-        if (!empty($request->kode_cabang)) {
-            $query->where('karyawan.kode_cabang', $request->kode_cabang);
-        }
-
-        if ($user->hasRole('admin departemen')) {
-            $query->where('karyawan.kode_dept', $kode_dept);
-            $query->where('karyawan.kode_cabang', $kode_cabang);
-        }
-        $karyawan = $query->paginate(10);
-
-        $departemen = DB::table('departemen')->get();
-        $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
-        return view('karyawan.index', compact('karyawan', 'departemen', 'cabang'));
     }
 
     public function store(Request $request)

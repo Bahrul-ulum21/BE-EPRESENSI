@@ -31,11 +31,11 @@
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
 		<style>
 			@import url('https://rsms.me/inter/inter.css');
-	
+
 			:root {
 				--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
 			}
-	
+
 			body {
 				font-feature-settings: "cv03", "cv04", "cv11";
 			}
@@ -261,8 +261,9 @@
 							role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							<img src="{{ asset ('assetss/images/bahrul.jpg')}}" class="rounded-2 img-3x" alt="Bootstrap Gallery" />
 							<div class="ms-2 text-truncate d-lg-block d-none text-white">
-								<span>{{ Auth::guard('user')->user()->name }} </span>
-								<span class="d-flex opacity-50 small">{{ ucwords(Auth::guard('user')->user()->roles->pluck('name')[0]) }}</span>
+								<span>{{ Auth::user()->name }} </span>
+								<span class="d-flex opacity-50 small">{{ ucwords(Auth::user()->getRoleNames()->first()) }}
+                                </span>
 							</div>
 						</a>
 						<div class="dropdown-menu dropdown-menu-end shadow-lg">
@@ -295,7 +296,7 @@
 						<img src="{{ asset('assetss/images/bahrul.jpg')}}" class="profile-user mb-3" alt="Admin Dashboard" />
 						<div class="text-center">
 							<h6 class="profile-name m-0 text-nowrap text-truncate">
-							{{ Auth::guard('user')->user()->name }} 
+							{{-- {{ Auth::user()->name }} --}}
 							</h6>
 						</div>
 						<div class="d-flex align-items-center mt-lg-3 gap-2">
@@ -329,7 +330,7 @@
 									<li>
 										<a class="{{ request()->is(['konfigurasi/jamkerja']) ? 'active-sub' : '' }}" href="/konfigurasi/jamkerja">Jam Kerja</a>
 									</li>
-                                @role('administrator', 'user')
+                                {{-- @role('administrator', 'user') --}}
 									<li>
 										<a class="{{ request()->is(['departemen']) ? 'active-sub' : '' }}" href="/departemen">Departemen</a>
 									</li>
@@ -339,7 +340,7 @@
 									<li>
 										<a class="{{ request()->is(['cuti']) ? 'active-sub' : '' }}" href="/cuti">Cuti</a>
 									</li>
-                                @endrole
+                                {{-- @endrole --}}
 								</ul>
 							</li>
 							<li class="{{ request()->is('presensi/monitoring') ? 'active current-page' : '' }}">
@@ -368,7 +369,7 @@
 									</li>
 								</ul>
 							</li>
-							@role('administrator', 'user')
+							{{-- @role('administrator', 'user') --}}
 							<li class="treeview {{ request()->is(['karyawan', 'departemen', 'konfigurasi/users']) ? 'active' : '' }}">
 								<a href="#!">
 									<i class="bi bi-pie-chart"></i>
@@ -376,16 +377,16 @@
 								</a>
 								<ul class="treeview-menu">
 									<li >
-										@role('administrator|admin departemen', 'user')
+										{{-- @role('administrator|admin departemen', 'user') --}}
 										<a href="/karyawan" class="{{ request()->is(['karyawan']) ? 'active-sub' : '' }}">Karyawan</a>
-                                        @endrole
+                                        {{-- @endrole --}}
 									</li>
 									<li>
 										<a class="{{ request()->is(['konfigurasi/users']) ? 'active-sub' : '' }}" href="/konfigurasi/users">Users</a>
 									</li>
 								</ul>
 							</li>
-							@endrole
+							{{-- @endrole --}}
 						</ul>
 					</div>
 					<!-- Sidebar menu ends -->

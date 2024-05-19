@@ -52,7 +52,11 @@ use Spatie\Permission\Models\Role;
 // });
 // Route untuk karyawan
 // Route::middleware(['auth:karyawan'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    // Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    });
+
     Route::get('/proseslogout', [AuthController::class, 'proseslogout']);
     //Presensi
     Route::get('/presensi/create', [PresensiController::class, 'create']);
@@ -94,9 +98,12 @@ use Spatie\Permission\Models\Role;
 
 //Route Yang Bisa di AKses Oleh Administrator dan Admin Departemen
 // Route::group(['middleware' => ['role:administrator|admin departemen,user']], function () {
-    Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin']);
-    Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
 
+    Route::get('/proseslogoutadmin', [AuthController::class, 'proseslogoutadmin']);
+    Route::middleware(['auth'])->group(function () {
+
+    Route::get('/panel/dashboardadmin', [DashboardController::class, 'dashboardadmin']);
+    });
     //Karyawan
     Route::get('/karyawan', [KaryawanController::class, 'index']);
     Route::get('/karyawan/{nik}/resetpassword', [KaryawanController::class, 'resetpassword']);
@@ -137,7 +144,7 @@ use Spatie\Permission\Models\Role;
     Route::post('/karyawan/{nik}/delete', [KaryawanController::class, 'delete']);
 
     //Departemen
-    Route::get('/departemen', [DepartemenController::class, 'index'])->middleware('permission:view-departemen,user');;
+    Route::get('/departemen', [DepartemenController::class, 'index']);
     Route::post('/departemen/store', [DepartemenController::class, 'store']);
     Route::post('/departemen/edit', [DepartemenController::class, 'edit']);
     Route::post('/departemen/{kode_dept}/update', [DepartemenController::class, 'update']);
