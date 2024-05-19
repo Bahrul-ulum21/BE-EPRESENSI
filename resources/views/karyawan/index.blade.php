@@ -133,10 +133,10 @@
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $loop->iteration + $karyawan->firstItem() - 1 }}</td>
-                                                    <td>{{ $d->nik }}</td>
-                                                    <td>{{ $d->nama_lengkap }}</td>
-                                                    <td>{{ $d->jabatan }}</td>
-                                                    <td>{{ $d->no_hp }}</td>
+                                                    <td>{{ $d->username }}</td>
+                                                    <td>{{ $d->name }}</td>
+                                                    <td>{{ $d->kode_jabatan }}</td>
+                                                    <td>{{ $d->no_tlpn }}</td>
                                                     <td>
                                                         @if (empty($d->foto))
                                                             <img src="{{ asset('assets/img/nophoto.png') }}" class="avatar"
