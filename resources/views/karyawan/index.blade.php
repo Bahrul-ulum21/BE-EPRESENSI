@@ -171,7 +171,7 @@
                                                                         </svg>
                                                                     </a>
                                                                 {{-- @endrole --}}
-                                                                <a href="/konfigurasi/{{ $d->nik }}/setjamkerja"
+                                                                <a href="/konfigurasi/{{ $d->username }}/setjamkerja"
                                                                     class="btn btn-success btn-sm ml-2">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         class="icon icon-tabler icon-tabler-settings"

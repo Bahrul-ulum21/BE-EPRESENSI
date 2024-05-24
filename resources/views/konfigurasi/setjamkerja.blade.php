@@ -11,7 +11,7 @@
                                 Set Jam Kerja.
                             </h2>
                         </div>
-        
+
                     </div>
                 </div>
             </div>
@@ -22,11 +22,11 @@
                             <table class="table">
                                 <tr>
                                     <th>NIK</th>
-                                    <td>{{ $karyawan->nik }}</td>
+                                    <td>{{ $karyawan->username }}</td>
                                 </tr>
                                 <tr>
                                     <th>Nama Karyawan</th>
-                                    <td>{{ $karyawan->nama_lengkap }}</td>
+                                    <td>{{ $karyawan->name }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -82,7 +82,7 @@
                                         <div class="tab-pane active show" id="setjamkerjaharian" role="tabpanel">
                                             <form action="/konfigurasi/storesetjamkerja" method="POST">
                                                 @csrf
-                                                <input type="hidden" name="nik" value="{{ $karyawan->nik }}">
+                                                <input type="hidden" name="nik" value="{{ $karyawan->username }}">
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
@@ -204,19 +204,19 @@
                                                 </table>
                                                 <button class="btn btn-primary w-100" type="submit">Simpan</button>
                                             </form>
-        
+
                                         </div>
                                         <div class="tab-pane" id="setjamkerjabydate" role="tabpanel">
                                             @include('konfigurasi.setjamkerjabydate')
                                         </div>
-        
+
                                     </div>
                                 </div>
                             </div>
-        
-        
-        
-        
+
+
+
+
                         </div>
                         <div class="col-6">
                             <table class="table">
@@ -264,7 +264,7 @@
             });
             $("#tambahjamkerja").click(function(e) {
                 e.preventDefault();
-                var nik = "{{ $karyawan->nik }}";
+                var nik = "{{ $karyawan->username }}";
                 var tanggal = $("#tanggal").val();
                 var kode_jam_kerja = $("#setjamkerjabydate").find("#kode_jam_kerja").val();
 
@@ -326,7 +326,7 @@
 
 
             function loadjamkerjabydate() {
-                var nik = "{{ $karyawan->nik }}";
+                var nik = "{{ $karyawan->username }}";
                 var bulan = $("#bulan").val();
                 var tahun = $("#tahun").val();
                 $("#loadjamkerjabydate").load('/konfigurasi/' + nik + '/' + bulan + '/' + tahun +
