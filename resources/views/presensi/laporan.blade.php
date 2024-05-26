@@ -55,7 +55,7 @@
                                         <select name="nik" id="nik" class="form-select">
                                             <option value="">Pilih Karyawan</option>
                                             @foreach ($karyawan as $d)
-                                            <option value="{{ $d->nik }}">{{ $d->nama_lengkap }}</option>
+                                            <option value="{{ $d->username }}">{{ $d->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

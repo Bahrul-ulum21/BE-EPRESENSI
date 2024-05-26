@@ -429,15 +429,15 @@ class PresensiController extends Controller
 
     public function getpresensi(Request $request)
     {
-        $kode_dept = Auth::guard('user')->user()->kode_dept;
-        $kode_cabang = Auth::guard('user')->user()->kode_cabang;
-        $user = User::find(Auth::guard('user')->user()->id);
+        $kode_dept = Auth::user()->kode_dept;
+        $kode_cabang = Auth::user()->kode_cabang;
+        $user = User::find(Auth::user()->id);
 
         $tanggal = $request->tanggal;
 
-        $query = Karyawan::query();
+        $query = User::query();
         $query->selectRaw(
-            'karyawan.nik, nama_lengkap, karyawan.kode_dept, karyawan.kode_cabang,
+            'users.username, name, users.kode_dept, users.kode_cabang,
         datapresensi.id,jam_in,jam_out,foto_in,foto_out,lokasi_in,lokasi_out,
         datapresensi.status,jam_masuk, nama_jam_kerja, jam_pulang, keterangan'
         );
@@ -451,23 +451,23 @@ class PresensiController extends Controller
                 WHERE tgl_presensi = '$tanggal'
             ) datapresensi"),
             function ($join) {
-                $join->on('karyawan.nik', '=', 'datapresensi.nik');
+                $join->on('users.username', '=', 'datapresensi.nik');
             }
         );
 
         if (!empty($request->kode_cabang)) {
-            $query->where('karyawan.kode_cabang', $request->kode_cabang);
+            $query->where('users.kode_cabang', $request->kode_cabang);
         }
 
         if (!empty($request->kode_dept)) {
-            $query->where('karyawan.kode_dept', $request->kode_dept);
+            $query->where('users.kode_dept', $request->kode_dept);
         }
 
         if ($user->hasRole('admin departemen')) {
-            $query->where('karyawan.kode_cabang', $kode_cabang);
-            $query->where('karyawan.kode_dept', $kode_dept);
+            $query->where('users.kode_cabang', $kode_cabang);
+            $query->where('users.kode_dept', $kode_dept);
         }
-        $query->orderBy('nama_lengkap');
+        $query->orderBy('name');
         $presensi = $query->get();
 
         return view('presensi.getpresensi', compact('presensi', 'tanggal'));
@@ -488,19 +488,18 @@ class PresensiController extends Controller
         $kode_dept = Auth::user()->kode_dept;
         $kode_cabang = Auth::user()->kode_cabang;
         $user = User::find(Auth::user()->id);
-
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         if ($user->hasRole('admin departemen')) {
-            $karyawan = DB::table('karyawan')
+            $karyawan = DB::table('users')
                 ->where('kode_dept', $kode_dept)
                 ->where('kode_cabang', $kode_cabang)
-                ->orderBy('nama_lengkap')->get();
-        } else if ($user->hasRole('administrator')) {
-            $karyawan = DB::table('karyawan')
-                ->orderBy('nama_lengkap')->get();
+                ->orderBy('name')->get();
+        } else if ($user->hasRole('admin')) {
+            $karyawan = DB::table('users')
+                ->orderBy('name')->get();
         }
 
-        return view('presensi.laporan', compact('namabulan', 'user'));
+        return view('presensi.laporan', compact('namabulan', 'user','karyawan'));
     }
 
     public function cetaklaporan(Request $request)
@@ -512,8 +511,8 @@ class PresensiController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        $karyawan = DB::table('karyawan')->where('nik', $nik)
-            ->join('departemen', 'karyawan.kode_dept', '=', 'departemen.kode_dept')
+        $karyawan = DB::table('users')->where('username', $nik)
+            ->join('departemen', 'users.kode_dept', '=', 'departemen.kode_dept')
             ->first();
 
         $presensi = DB::table('presensi')

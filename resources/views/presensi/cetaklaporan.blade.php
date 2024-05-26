@@ -94,17 +94,17 @@
             <tr>
                 <td>NIK</td>
                 <td>:</td>
-                <td>{{ $karyawan->nik }}</td>
+                <td>{{ $karyawan->username }}</td>
             </tr>
             <tr>
                 <td>Nama Karyawan</td>
                 <td>:</td>
-                <td>{{ $karyawan->nama_lengkap }}</td>
+                <td>{{ $karyawan->name }}</td>
             </tr>
             <tr>
                 <td>Jabatan</td>
                 <td>:</td>
-                <td>{{ $karyawan->jabatan }}</td>
+                <td>{{ $karyawan->kode_jabatan}}</td>
             </tr>
             <tr>
                 <td>Departemen</td>
@@ -114,7 +114,7 @@
             <tr>
                 <td>No. HP</td>
                 <td>:</td>
-                <td>{{ $karyawan->no_hp }}</td>
+                <td>{{ $karyawan->no_tlpn }}</td>
             </tr>
         </table>
         <table class="tabelpresensi">

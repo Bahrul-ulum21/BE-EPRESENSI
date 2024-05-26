@@ -87,12 +87,12 @@
                 <tr>
                     <td>NIK</td>
                     <td>:</td>
-                    <td>{{ $karyawan->nik }}</td>
+                    <td>{{ $karyawan->username }}</td>
                 </tr>
                 <tr>
                     <td>Nama Karyawan</td>
                     <td>:</td>
-                    <td>{{ $karyawan->nama_lengkap }}</td>
+                    <td>{{ $karyawan->name }}</td>
                 </tr>
                 <tr>
                     <td>Jabatan</td>
