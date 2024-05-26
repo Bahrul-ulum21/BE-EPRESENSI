@@ -22,8 +22,8 @@ function selisih($jam_masuk, $jam_keluar)
     @if ($d->status == 'h')
         <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $d->nik }}</td>
-            <td>{{ $d->nama_lengkap }}</td>
+            <td>{{ $d->username }}</td>
+            <td>{{ $d->name }}</td>
             <td>{{ $d->kode_cabang }}</td>
             <td>{{ $d->kode_dept }}</td>
             <td>
