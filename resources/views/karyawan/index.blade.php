@@ -152,7 +152,7 @@
                                                             <div>
                                                                 {{-- @role('administrator', 'user') --}}
                                                                     <a href="#" class="edit btn btn-info btn-sm"
-                                                                        nik="{{ $d->nik }}">
+                                                                        nik="{{ $d->username }}">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                             class="icon icon-tabler icon-tabler-edit"
                                                                             width="24" height="24" viewBox="0 0 24 24"

@@ -148,6 +148,7 @@ class KonfigurasiController extends Controller
             Setjamkerja::insert($data);
             return redirect('/karyawan')->with(['success' => 'Jam Kerja Berhasil Di Seting']);
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return redirect('/karyawan')->with(['warning' => 'Jam Kerja Gagal Di Seting']);
             // dd($e);
         }
@@ -176,6 +177,7 @@ class KonfigurasiController extends Controller
             DB::commit();
             return redirect('/karyawan')->with(['success' => 'Jam Kerja Berhasil Di Seting']);
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return redirect('/karyawan')->with(['warning' => 'Jam Kerja Gagal Di Seting']);
             // dd($e);

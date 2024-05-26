@@ -39,9 +39,14 @@ class AuthController extends Controller
     public function prosesloginadmin(Request $request)
     {
         $credentials = $request->only('username', 'password');
+        $user = Auth::getProvider()->retrieveByCredentials($credentials);
 
-        if (Auth::attempt($credentials)) {
-            if (Auth::user()->hasRole('admin')) {
+        if ($user) {
+            // Log the user in
+            Auth::login($user);
+
+            // Now you can check the role
+            if ($user->hasRole('admin')) {
                 return redirect('/panel/dashboardadmin');
             } else {
                 return redirect('/dashboard');
@@ -51,4 +56,5 @@ class AuthController extends Controller
         // Authentication failed
         return redirect('/')->with(['warning' => 'Nik (Username) / Password Salah']);
     }
+
 }

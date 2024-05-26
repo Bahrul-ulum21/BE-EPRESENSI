@@ -101,10 +101,11 @@ class KaryawanController extends Controller
 
     public function edit(Request $request)
     {
+
         $nik = $request->nik;
         $departemen = DB::table('departemen')->get();
         $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
-        $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
+        $karyawan = DB::table('users')->where('username', $nik)->first();
         return view('karyawan.edit', compact('departemen', 'karyawan', 'cabang'));
     }
 
@@ -126,25 +127,25 @@ class KaryawanController extends Controller
         }
 
 
-        $ceknik = DB::table('karyawan')
-            ->where('nik', $nik_baru)
-            ->where('nik', '!=', $nik)
+        $ceknik = DB::table('users')
+            ->where('username', $nik_baru)
+            ->where('username', '!=', $nik)
             ->count();
         if ($ceknik > 0) {
             return Redirect::back()->with(['warning' => 'Nik Sudah Digunakan']);
         }
         try {
             $data =  [
-                'nik' => $nik_baru,
-                'nama_lengkap' => $nama_lengkap,
-                'jabatan' => $jabatan,
-                'no_hp' => $no_hp,
+                'username' => $nik_baru,
+                'name' => $nama_lengkap,
+                'kode_jabatan' => $jabatan,
+                'no_tlpn' => $no_hp,
                 'kode_dept' => $kode_dept,
                 'foto' => $foto,
                 'password' => $password,
                 'kode_cabang' => $kode_cabang
             ];
-            $update = DB::table('karyawan')->where('nik', $nik)->update($data);
+            $update = DB::table('users')->where('username', $nik)->update($data);
             if ($update) {
                 if ($request->hasFile('foto')) {
                     $folderPath = "public/uploads/karyawan/";

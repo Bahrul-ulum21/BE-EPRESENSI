@@ -1,4 +1,4 @@
-<form action="/karyawan/{{ Crypt::encrypt($karyawan->nik) }}/update" method="POST" id="frmEditkaryawan"
+<form action="/karyawan/{{ Crypt::encrypt($karyawan->username) }}/update" method="POST" id="frmEditkaryawan"
     enctype="multipart/form-data">
     @csrf
     <div class="row">
@@ -20,7 +20,7 @@
                         <path d="M19 11l0 2"></path>
                     </svg>
                 </span>
-                <input type="text" value="{{ $karyawan->nik }}" id="nik" class="form-control" placeholder="Nik"
+                <input type="text" value="{{ $karyawan->username }}" id="nik" class="form-control" placeholder="Username..."
                     name="nik_baru">
             </div>
         </div>
@@ -38,7 +38,7 @@
                         <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                     </svg>
                 </span>
-                <input type="text" id="nama_lengkap" value="{{ $karyawan->nama_lengkap }}" class="form-control"
+                <input type="text" id="nama_lengkap" value="{{ $karyawan->name }}" class="form-control"
                     name="nama_lengkap" placeholder="Nama Lengkap">
             </div>
         </div>
@@ -60,7 +60,7 @@
                         <path d="M8 12l3 -3l2 2l3 -3"></path>
                     </svg>
                 </span>
-                <input type="text" id="jabatan" value="{{ $karyawan->jabatan }}" class="form-control"
+                <input type="text" id="jabatan" value="{{ $karyawan->kode_jabatan }}" class="form-control"
                     name="jabatan" placeholder="Jabatan">
             </div>
         </div>
@@ -79,7 +79,7 @@
                         </path>
                     </svg>
                 </span>
-                <input type="text" id="no_hp" value="{{ $karyawan->no_hp }}" class="form-control" name="no_hp"
+                <input type="text" id="no_hp" value="{{ $karyawan->no_tlpn }}" class="form-control" name="no_hp"
                     placeholder="No. HP">
             </div>
         </div>

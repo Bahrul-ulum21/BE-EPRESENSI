@@ -60,7 +60,7 @@ class PresensiController extends Controller
 
     public function create()
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
+        $nik = Auth::user()->username;
         $hariini = date("Y-m-d");
         $jamsekarang = date("H:i");
         $tgl_sebelumnya = date('Y-m-d', strtotime("-1 days", strtotime($hariini)));
@@ -80,11 +80,11 @@ class PresensiController extends Controller
         $namahari = $this->gethari(date('D', strtotime($hariini)));
 
 
-        $kode_dept = Auth::guard('karyawan')->user()->kode_dept;
+        $kode_dept = Auth::user()->kode_dept;
         $presensi = DB::table('presensi')->where('tgl_presensi', $hariini)->where('nik', $nik);
         $cek = $presensi->count();
         $datapresensi = $presensi->first();
-        $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
+        $kode_cabang = Auth::user()->kode_cabang;
         $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
 
 
@@ -125,7 +125,7 @@ class PresensiController extends Controller
     public function store(Request $request)
     {
 
-        $nik = Auth::guard('karyawan')->user()->nik;
+        $nik = Auth::user()->username;
         $hariini = date("Y-m-d");
         $jamsekarang = date("H:i");
         $tgl_sebelumnya = date('Y-m-d', strtotime("-1 days", strtotime($hariini)));
@@ -137,8 +137,8 @@ class PresensiController extends Controller
 
         $ceklintashari_presensi = $cekpresensi_sebelumnya != null  ? $cekpresensi_sebelumnya->lintashari : 0;
 
-        $kode_cabang = Auth::guard('karyawan')->user()->kode_cabang;
-        $kode_dept = Auth::guard('karyawan')->user()->kode_dept;
+        $kode_cabang = Auth::user()->kode_cabang;
+        $kode_dept = Auth::user()->kode_dept;
         $tgl_presensi = $ceklintashari_presensi == 1 && $jamsekarang < "08:00" ? $tgl_sebelumnya : date("Y-m-d");
         $jam = date("H:i:s");
         $lok_kantor = DB::table('cabang')->where('kode_cabang', $kode_cabang)->first();
@@ -202,8 +202,8 @@ class PresensiController extends Controller
         $tgl_pulang = $jamkerja->lintashari == 1 ? date('Y-m-d', strtotime("+ 1 days", strtotime($tgl_presensi))) : $tgl_presensi;
         $jam_pulang = $hariini . " " . $jam;
         $jamkerja_pulang = $tgl_pulang . " " . $jamkerja->jam_pulang;
-        $datakaryawan = DB::table('karyawan')->where('nik', $nik)->first();
-        $no_hp = $datakaryawan->no_hp;
+        $datakaryawan = DB::table('users')->where('username', $nik)->first();
+        $no_hp = $datakaryawan->no_tlpn;
         if ($radius > $lok_kantor->radius_cabang) {
             echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda " . $radius . " meter dari Kantor|radius";
         } else {
@@ -250,7 +250,8 @@ class PresensiController extends Controller
                     echo "error|Maaf Belum Waktunya Melakuan Presensi|in";
                 } else if ($jam > $jamkerja->akhir_jam_masuk) {
                     echo "error|Maaf Waktu Untuk Presensi Sudah Habis |in";
-                } else {
+                }else if ($jam == $jamkerja->akhir_jam_masuk && $jam <= $jamkerja->akhir_jam_masuk ) {
+
                     $data = [
                         'nik' => $nik,
                         'tgl_presensi' => $tgl_presensi,
@@ -263,6 +264,48 @@ class PresensiController extends Controller
                     $simpan = DB::table('presensi')->insert($data);
                     if ($simpan) {
                         echo "success|Terimkasih, Selamat Bekerja|in";
+
+                        $curl = curl_init();
+
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => 'https://wagateway.pedasalami.com/send-message',
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => '',
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => 'POST',
+                            CURLOPT_POSTFIELDS => array('message' => 'Terimakasih Sudah Melakukan Absen Masuk, Anda Melakukan Absen Pada Jam ' . $jam, 'number' => $no_hp, 'file_dikirim' => ''),
+                        ));
+
+                        $response = curl_exec($curl);
+
+                        curl_close($curl);
+                        // echo $response;
+                        Storage::put($file, $image_base64);
+                    } else {
+                        echo "error|Maaf Gagal absen, Hubungi Tim It|in";
+                    }
+                }
+
+                else {
+
+                    $data = [
+                        'nik' => $nik,
+                        'tgl_presensi' => $tgl_presensi,
+                        'jam_in' => null,
+                        'foto_in' => null,
+                        'lokasi_in' => null,
+                        'kode_jam_kerja' => $jamkerja->kode_jam_kerja,
+                        'jam_out' => $jam,
+                        'foto_out' => $fileName,
+                        'lokasi_out' => $lokasi,
+                        'status' => 'h'
+                    ];
+                    $simpan = DB::table('presensi')->insert($data);
+                    if ($simpan) {
+                        echo "success|Terimkasih, Hati Hati Di Jalan|out";
 
                         $curl = curl_init();
 
@@ -352,7 +395,7 @@ class PresensiController extends Controller
     {
         $bulan = $request->bulan;
         $tahun = $request->tahun;
-        $nik = Auth::guard('karyawan')->user()->nik;
+        $nik = Auth::user()->username;
 
         $histori = DB::table('presensi')
             ->select('presensi.*', 'keterangan', 'jam_kerja.*', 'doc_sid', 'nama_cuti')

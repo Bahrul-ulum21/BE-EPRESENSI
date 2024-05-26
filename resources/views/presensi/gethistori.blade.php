@@ -15,7 +15,7 @@
 
 @if ($histori->isEmpty())
     <div class="alert  alert-outline-warning">
-        <p>Data Belum Aada</p>
+        <p>Data Belum Ada</p>
     </div>
 @endif
 @foreach ($histori as $d)

@@ -259,7 +259,7 @@
 					<div class="dropdown ms-3">
 						<a id="userSettings" class="dropdown-toggle d-flex py-2 align-items-center text-decoration-none" href="#!"
 							role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="{{ asset ('assetss/images/bahrul.jpg')}}" class="rounded-2 img-3x" alt="Bootstrap Gallery" />
+                            <img src="{{ asset('uploads/karyawan/' . Auth::user()->foto) }}" class="rounded-2 img-3x" alt="Bootstrap Gallery" />
 							<div class="ms-2 text-truncate d-lg-block d-none text-white">
 								<span>{{ Auth::user()->name }} </span>
 								<span class="d-flex opacity-50 small">{{ ucwords(Auth::user()->getRoleNames()->first()) }}
@@ -469,7 +469,7 @@
     <script src="{{ asset('tabler/dist/libs/jsvectormap/dist/maps/world-merc.js?1674944402') }}" defer></script>
 
     <!-- Tabler Core -->
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/jquery.min.js') }}" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
     <script src="{{ asset('tabler/dist/js/tabler.min.js?1674944402') }}" defer></script>
     <script src="{{ asset('tabler/dist/js/demo.min.js?1674944402') }}" defer></script>

@@ -342,8 +342,8 @@
                             <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
                             <div class="in">
                                 <div>
-                                    <b>{{ $d->nama_lengkap }}</b><br>
-                                    <small class="text-muted">{{ $d->jabatan }}</small>
+                                    <b>{{ $d->name }}</b><br>
+                                    <small class="text-muted">{{ $d->kode_jabatan }}</small>
                                 </div>
                                 <span class="badge {{ $d->jam_in < '07:00' ? 'bg-success' : 'bg-danger' }}">
                                     {{ $d->jam_in }}
