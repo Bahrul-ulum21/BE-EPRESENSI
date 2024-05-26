@@ -208,9 +208,7 @@ class PresensiController extends Controller
             echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda " . $radius . " meter dari Kantor|radius";
         } else {
             if ($cek > 0) {
-                if ($jam_pulang < $jamkerja_pulang) {
-                    echo "error|Maaf Belum Waktunya Pulang |out";
-                } else if (!empty($datapresensi->jam_out)) {
+                if (!empty($datapresensi->jam_out)) {
                     echo "error|Anda Sudah Melakukan Absen Pulang Sebelmnya ! |out";
                 } else {
                     $data_pulang = [
@@ -250,8 +248,7 @@ class PresensiController extends Controller
                     echo "error|Maaf Belum Waktunya Melakuan Presensi|in";
                 } else if ($jam > $jamkerja->akhir_jam_masuk) {
                     echo "error|Maaf Waktu Untuk Presensi Sudah Habis |in";
-                }else if ($jam == $jamkerja->akhir_jam_masuk && $jam <= $jamkerja->akhir_jam_masuk ) {
-
+                } else {
                     $data = [
                         'nik' => $nik,
                         'tgl_presensi' => $tgl_presensi,
@@ -264,48 +261,6 @@ class PresensiController extends Controller
                     $simpan = DB::table('presensi')->insert($data);
                     if ($simpan) {
                         echo "success|Terimkasih, Selamat Bekerja|in";
-
-                        $curl = curl_init();
-
-                        curl_setopt_array($curl, array(
-                            CURLOPT_URL => 'https://wagateway.pedasalami.com/send-message',
-                            CURLOPT_RETURNTRANSFER => true,
-                            CURLOPT_ENCODING => '',
-                            CURLOPT_MAXREDIRS => 10,
-                            CURLOPT_TIMEOUT => 0,
-                            CURLOPT_FOLLOWLOCATION => true,
-                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                            CURLOPT_CUSTOMREQUEST => 'POST',
-                            CURLOPT_POSTFIELDS => array('message' => 'Terimakasih Sudah Melakukan Absen Masuk, Anda Melakukan Absen Pada Jam ' . $jam, 'number' => $no_hp, 'file_dikirim' => ''),
-                        ));
-
-                        $response = curl_exec($curl);
-
-                        curl_close($curl);
-                        // echo $response;
-                        Storage::put($file, $image_base64);
-                    } else {
-                        echo "error|Maaf Gagal absen, Hubungi Tim It|in";
-                    }
-                }
-
-                else {
-
-                    $data = [
-                        'nik' => $nik,
-                        'tgl_presensi' => $tgl_presensi,
-                        'jam_in' => null,
-                        'foto_in' => null,
-                        'lokasi_in' => null,
-                        'kode_jam_kerja' => $jamkerja->kode_jam_kerja,
-                        'jam_out' => $jam,
-                        'foto_out' => $fileName,
-                        'lokasi_out' => $lokasi,
-                        'status' => 'h'
-                    ];
-                    $simpan = DB::table('presensi')->insert($data);
-                    if ($simpan) {
-                        echo "success|Terimkasih, Hati Hati Di Jalan|out";
 
                         $curl = curl_init();
 
