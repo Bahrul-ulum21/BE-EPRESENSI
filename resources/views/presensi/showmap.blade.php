@@ -26,7 +26,7 @@
 
     var popup = L.popup()
         .setLatLng([latitude, longitude])
-        .setContent("{{ $presensi->nama_lengkap }}")
+        .setContent("{{ $presensi->name }}")
         .openOn(map);
 
 </script>

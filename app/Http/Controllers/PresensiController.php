@@ -476,8 +476,8 @@ class PresensiController extends Controller
     public function tampilkanpeta(Request $request)
     {
         $id = $request->id;
-        $presensi = DB::table('presensi')->where('id', $id)
-            ->join('karyawan', 'presensi.nik', '=', 'karyawan.nik')
+        $presensi = DB::table('presensi')->where('presensi.id', $id)
+            ->join('users', 'presensi.nik', '=', 'users.username')
             ->first();
         return view('presensi.showmap', compact('presensi'));
     }
