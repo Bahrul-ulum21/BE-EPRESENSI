@@ -369,7 +369,7 @@ class PresensiController extends Controller
 
     public function izin(Request $request)
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
+        $nik = Auth::user()->username;
 
         if (!empty($request->bulan) && !empty($request->tahun)) {
             $dataizin = DB::table('pengajuan_izin')

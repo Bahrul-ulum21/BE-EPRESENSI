@@ -17,7 +17,7 @@ class IzinabsenController extends Controller
 
     public function store(Request $request)
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
+        $nik = Auth::user()->username;
         $tgl_izin_dari = $request->tgl_izin_dari;
         $tgl_izin_sampai = $request->tgl_izin_sampai;
         $status = "i";
@@ -39,6 +39,9 @@ class IzinabsenController extends Controller
         //dd($kode_izin);
         $data = [
             'kode_izin' => $kode_izin,
+            'kode_cuti'=>'',
+            'doc_sid'=>'',
+            'status_approved'=>'',
             'nik' => $nik,
             'tgl_izin_dari' => $tgl_izin_dari,
             'tgl_izin_sampai' => $tgl_izin_sampai,
