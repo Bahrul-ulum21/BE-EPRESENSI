@@ -75,7 +75,8 @@ class IzincutiController extends Controller
             'kode_cuti' => $kode_cuti,
             'status' => $status,
             'keterangan' => $keterangan,
-            'doc_sid' => $sid
+            'doc_sid' => $sid,
+            'status_approved'=>'',
 
         ];
         // dd($data);
