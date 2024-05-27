@@ -62,6 +62,7 @@ class KaryawanController extends Controller
         $no_hp = $request->no_hp;
         $kode_dept = $request->kode_dept;
         $password = Hash::make('12345');
+        $email = "test@gmail.com";
         $kode_cabang = $request->kode_cabang;
         if ($request->hasFile('foto')) {
             $foto = $nik . "." . $request->file('foto')->getClientOriginalExtension();
@@ -71,16 +72,17 @@ class KaryawanController extends Controller
 
         try {
             $data =  [
-                'nik' => $nik,
-                'nama_lengkap' => $nama_lengkap,
-                'jabatan' => $jabatan,
-                'no_hp' => $no_hp,
+                'username' => $nik,
+                'name' => $nama_lengkap,
+                'email' => $email,
+                'kode_jabatan' => $jabatan,
+                'no_tlpn' => $no_hp,
                 'kode_dept' => $kode_dept,
                 'foto' => $foto,
                 'password' => $password,
                 'kode_cabang' => $kode_cabang
             ];
-            $simpan = DB::table('karyawan')->insert($data);
+            $simpan = DB::table('users')->insert($data);
             if ($simpan) {
                 if ($request->hasFile('foto')) {
                     $folderPath = "public/uploads/karyawan/";
@@ -89,7 +91,7 @@ class KaryawanController extends Controller
                 return Redirect::back()->with(['success' => 'Data Berhasil Disimpan']);
             }
         } catch (\Exception $e) {
-
+            dd($e->getMessage());
             if ($e->getCode() == 23000) {
                 $message = "Data dengan Nik " . $nik . " Sudah Ada";
             } else {
@@ -156,14 +158,14 @@ class KaryawanController extends Controller
                 return Redirect::back()->with(['success' => 'Data Berhasil Update']);
             }
         } catch (\Exception $e) {
-            dd($e);
+            dd($e->getMessage());
             return Redirect::back()->with(['warning' => 'Data Gagal Diupdate']);
         }
     }
 
     public function delete($nik)
     {
-        $delete = DB::table('karyawan')->where('nik', $nik)->delete();
+        $delete = DB::table('users')->where('username', $nik)->delete();
         if ($delete) {
             return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);
         } else {
@@ -175,7 +177,7 @@ class KaryawanController extends Controller
     {
         $nik = Crypt::decrypt($nik);
         $password = Hash::make('12345');
-        $reset = DB::table('karyawan')->where('nik', $nik)->update([
+        $reset = DB::table('users')->where('username', $nik)->update([
             'password' => $password
         ]);
 

@@ -591,9 +591,9 @@ class PresensiController extends Controller
         }
 
 
-        $query = Karyawan::query();
+        $query = User::query();
         $query->selectRaw(
-            "$field_date karyawan.nik, nama_lengkap, jabatan"
+            "$field_date users.username, name, kode_jabatan"
         );
 
         $query->leftJoin(
@@ -608,7 +608,7 @@ class PresensiController extends Controller
                 GROUP BY nik
             ) presensi"),
             function ($join) {
-                $join->on('karyawan.nik', '=', 'presensi.nik');
+                $join->on('users.username', '=', 'presensi.nik');
             }
         );
         if (!empty($kode_dept)) {
@@ -620,7 +620,7 @@ class PresensiController extends Controller
         }
 
 
-        $query->orderBy('nama_lengkap');
+        $query->orderBy('name');
         $rekap = $query->get();
 
         //dd($rekap);
@@ -637,9 +637,9 @@ class PresensiController extends Controller
     public function izinsakit(Request $request)
     {
 
-        $kode_dept = Auth::guard('user')->user()->kode_dept;
-        $kode_cabang = Auth::guard('user')->user()->kode_cabang;
-        $user = User::find(Auth::guard('user')->user()->id);
+        $kode_dept = Auth::user()->kode_dept;
+        $kode_cabang = Auth::user()->kode_cabang;
+        $user = User::find(Auth::user()->id);
 
         $query = Pengajuanizin::query();
         $query->select(
@@ -652,11 +652,11 @@ class PresensiController extends Controller
             'status',
             'status_approved',
             'keterangan',
-            'karyawan.kode_cabang',
-            'karyawan.kode_dept',
+            'users.kode_cabang',
+            'users.kode_dept',
             'doc_sid'
         );
-        $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
+        $query->join('users', 'pengajuan_izin.nik', '=', 'users.username');
         if (!empty($request->dari) && !empty($request->sampai)) {
             $query->whereBetween('tgl_izin_dari', [$request->dari, $request->sampai]);
         }
@@ -666,24 +666,24 @@ class PresensiController extends Controller
         }
 
         if (!empty($request->nama_lengkap)) {
-            $query->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
+            $query->where('name', 'like', '%' . $request->nama_lengkap . '%');
         }
 
         if ($request->status_approved === '0' || $request->status_approved === '1' || $request->status_approved === '2') {
             $query->where('status_approved', $request->status_approved);
         }
 
-        if ($user->hasRole('admin departemen')) {
-            $query->where('karyawan.kode_dept', $kode_dept);
-            $query->where('karyawan.kode_cabang', $kode_cabang);
+        if ($user->hasRole('admin')) {
+            $query->where('users.kode_dept', $kode_dept);
+            $query->where('users.kode_cabang', $kode_cabang);
         }
 
         if (!empty($request->kode_cabang)) {
-            $query->where('karyawan.kode_cabang', $request->kode_cabang);
+            $query->where('users.kode_cabang', $request->kode_cabang);
         }
 
         if (!empty($request->kode_dept)) {
-            $query->where('karyawan.kode_dept', $request->kode_dept);
+            $query->where('users.kode_dept', $request->kode_dept);
         }
 
         $query->orderBy('tgl_izin_dari', 'desc');

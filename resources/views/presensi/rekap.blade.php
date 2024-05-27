@@ -21,7 +21,7 @@
                     <div class="card-body">
                         <form action="/presensi/cetakrekap" target="_blank" method="POST">
                             @csrf
-                            @role('administrator', 'user')
+                            {{-- @role('administrator', 'user') --}}
                             <div class="row mt-1">
                                 <div class="col-12">
                                     <div class="form-group">
@@ -35,9 +35,9 @@
                                     </div>
                                 </div>
                             </div>
-                            @else
+                            {{-- @else --}}
                             <input type="hidden" name="kode_cabang" value="{{ Auth::user()->kode_cabang }}">
-                            @endrole
+                            {{-- @endrole --}}
                             <div class="row mt-2">
                                 <div class="col-12">
                                     <div class="form-group">
@@ -69,7 +69,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @role('administrator', 'user')
+                            {{-- @role('administrator', 'user') --}}
                             <div class="row mt-2">
                                 <div class="col-12">
                                     <div class="form-group">
@@ -82,9 +82,9 @@
                                     </div>
                                 </div>
                             </div>
-                            @else
+                            {{-- @else --}}
                             <input type="hidden" name="kode_dept" value="{{ Auth::user()->kode_dept }}">
-                            @endrole
+                            {{-- @endrole --}}
                             <div class="row mt-2">
                                 <div class="col-6">
                                     <div class="form-group">

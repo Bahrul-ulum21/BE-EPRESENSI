@@ -125,8 +125,8 @@
             </tr>
             @foreach ($rekap as $r)
                 <tr>
-                    <td>{{ $r->nik }}</td>
-                    <td>{{ $r->nama_lengkap }}</td>
+                    <td>{{ $r->username }}</td>
+                    <td>{{ $r->name }}</td>
 
                     <?php
                     $jml_hadir = 0;

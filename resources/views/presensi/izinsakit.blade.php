@@ -95,7 +95,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    @endrole
+                                    {{-- @endrole --}}
                                     <div class="col-2">
                                         <div class="form-group">
                                             <select name="status_approved" id="status_approved" class="form-select">
@@ -245,7 +245,7 @@
                                                     @endif
 
                                                 </td>
-                                            @endrole
+                                            {{-- @endrole --}}
                                         </tr>
                                     @endforeach
                                 </tbody>

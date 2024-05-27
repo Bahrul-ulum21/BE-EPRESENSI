@@ -208,7 +208,7 @@
                                                             </div>
                                                             {{-- @role('administrator', 'user') --}}
                                                                 <div>
-                                                                    <form action="/karyawan/{{ $d->nik }}/delete"
+                                                                    <form action="/karyawan/{{ $d->username }}/delete"
                                                                         method="POST" style="margin-left:5px">
                                                                         @csrf
                                                                         <a class="btn btn-danger btn-sm delete-confirm">
