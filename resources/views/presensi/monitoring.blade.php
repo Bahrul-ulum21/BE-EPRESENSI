@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                @role('administrator', 'user')
+                                {{-- @role('administrator', 'user') --}}
                                     <div class="col-4">
                                         <div class="input-icon mb-3">
                                             <span class="input-icon-addon">
@@ -83,7 +83,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                @else
+                                {{-- @else --}}
                                     <div class="col-12">
                                         <div class="input-icon mb-3">
                                             <span class="input-icon-addon">
@@ -107,7 +107,7 @@
                                                 autocomplete="off">
                                         </div>
                                     </div>
-                                @endrole
+                                {{-- @endrole --}}
                             </div>
                             <div class="row">
                                 <div class="col-12">
