@@ -16,7 +16,7 @@ class IzincutiController extends Controller
 
     public function store(Request $request)
     {
-        $nik = Auth::guard('karyawan')->user()->nik;
+        $nik = Auth::user()->username;
         $tgl_izin_dari = $request->tgl_izin_dari;
         $tgl_izin_sampai = $request->tgl_izin_sampai;
         $kode_cuti = $request->kode_cuti;
