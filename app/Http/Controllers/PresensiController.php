@@ -636,63 +636,62 @@ class PresensiController extends Controller
 
     public function izinsakit(Request $request)
     {
-
         $kode_dept = Auth::user()->kode_dept;
         $kode_cabang = Auth::user()->kode_cabang;
         $user = User::find(Auth::user()->id);
 
-        $query = Pengajuanizin::query();
-        $query->select(
+        $query = Pengajuanizin::select([
             'kode_izin',
             'tgl_izin_dari',
             'tgl_izin_sampai',
             'pengajuan_izin.nik',
-            'nama_lengkap',
-            'jabatan',
+            'username',
+            'name',
+            'kode_jabatan',
             'status',
             'status_approved',
             'keterangan',
             'users.kode_cabang',
             'users.kode_dept',
             'doc_sid'
-        );
-        $query->join('users', 'pengajuan_izin.nik', '=', 'users.username');
-        if (!empty($request->dari) && !empty($request->sampai)) {
+        ])
+        ->leftJoin('users', 'pengajuan_izin.nik', '=', 'users.username')
+        ->when($request->filled('dari') && $request->filled('sampai'), function ($query) use ($request) {
             $query->whereBetween('tgl_izin_dari', [$request->dari, $request->sampai]);
-        }
-
-        if (!empty($request->nik)) {
+        })
+        ->when($request->filled('nik'), function ($query) use ($request) {
             $query->where('pengajuan_izin.nik', $request->nik);
-        }
-
-        if (!empty($request->nama_lengkap)) {
-            $query->where('name', 'like', '%' . $request->nama_lengkap . '%');
-        }
-
-        if ($request->status_approved === '0' || $request->status_approved === '1' || $request->status_approved === '2') {
-            $query->where('status_approved', $request->status_approved);
-        }
-
-        if ($user->hasRole('admin')) {
-            $query->where('users.kode_dept', $kode_dept);
-            $query->where('users.kode_cabang', $kode_cabang);
-        }
-
-        if (!empty($request->kode_cabang)) {
+        })
+        ->when($request->filled('nama_lengkap'), function ($query) use ($request) {
+            $query->where('name', 'like', '%'. $request->nama_lengkap. '%');
+        })
+        // ->when(in_array($request->status_approved, [0, 1, 2]), function ($query) use ($request) {
+        //     $query->whereIn('status_approved', [$request->status_approved]);
+        // })
+        ->when($user->hasRole('admin'), function ($query) use ($request) {
+            $query->when($request->filled('kode_cabang'), function ($query) use ($request) {
+                $query->where('users.kode_cabang', $request->kode_cabang);
+            })
+            ->when($request->filled('kode_dept'), function ($query) use ($request) {
+                $query->where('users.kode_dept', $request->kode_dept);
+            });
+        })
+        ->when($request->filled('kode_cabang'), function ($query) use ($request) {
             $query->where('users.kode_cabang', $request->kode_cabang);
-        }
-
-        if (!empty($request->kode_dept)) {
+        })
+        ->when($request->filled('kode_dept'), function ($query) use ($request) {
             $query->where('users.kode_dept', $request->kode_dept);
-        }
-
-        $query->orderBy('tgl_izin_dari', 'desc');
-        $izinsakit = $query->paginate(10);
-        $izinsakit->appends($request->all());
-
+        })
+        ->orderBy('tgl_izin_dari', 'desc');
+        $izinsakit = $query->get();
         $cabang = DB::table('cabang')->orderBy('kode_cabang')->get();
         $departemen = DB::table('departemen')->orderBy('kode_dept')->get();
-        return view('presensi.izinsakit', compact('izinsakit', 'cabang', 'departemen'));
+
+        return view('presensi.izinsakit', compact(
+            'izinsakit',
+            'cabang',
+            'departemen',
+        ));
     }
 
     public function approveizinsakit(Request $request)

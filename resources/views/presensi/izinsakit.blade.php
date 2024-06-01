@@ -168,9 +168,9 @@
                                                 {{ date('d-m-Y', strtotime($d->tgl_izin_dari)) }} s/d
                                                 {{ date('d-m-Y', strtotime($d->tgl_izin_sampai)) }}
                                             </td>
-                                            <td>{{ $d->nik }}</td>
-                                            <td>{{ $d->nama_lengkap }}</td>
-                                            <td>{{ $d->jabatan }}</td>
+                                            <td>{{ $d->username }}</td>
+                                            <td>{{ $d->name }}</td>
+                                            <td>{{ $d->kode_jabatan }}</td>
                                             <td>{{ $d->kode_dept }}</td>
                                             <td>{{ $d->kode_cabang }}</td>
                                             <td>
@@ -250,7 +250,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            {{ $izinsakit->links('vendor.pagination.bootstrap-5') }}
+                            {{-- {{ $izinsakit->links('vendor.pagination.bootstrap-5') }} --}}
                         </div>
                     </div>
                 </div>
