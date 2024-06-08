@@ -212,7 +212,7 @@
                                             </td>
                                             {{-- @role('administrator', 'user') --}}
                                                 <td>
-                                                    @if ($d->status_approved == 0)
+                                                    @if ($d->status_approved == "")
                                                         <a href="#" class="btn btn-sm btn-primary approve"
                                                             kode_izin="{{ $d->kode_izin }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
